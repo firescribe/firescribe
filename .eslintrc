@@ -1,0 +1,30 @@
+{
+  "parser": "babel-eslint",
+  "plugins": [
+    "flowtype"
+  ],
+  "parserOptions":{
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "experimentalFunctionBind": true,
+      "experimentalClassProperties": true
+    }
+  },
+  "ecmaFeatures": {
+    "classes": true,
+    "jsx": true
+  },
+  "rules": {
+    "react/prop-types": 0,
+    "react/react-in-jsx-scope": 0,
+    "max-len": 0,
+    "global-require": 0,
+    "new-cap": 0,
+    "no-param-reassign": 0,
+    "import/no-unresolved": 0,
+    "no-underscore-dangle": 0,
+    "no-undef": 0,
+    "arrow-body-style": 0
+  },
+  "globals": {}
+}
