@@ -1,8 +1,8 @@
 {
   "presets": ["react-app"],
   "env": {
-    "development": {
-      "plugins": ["flow-react-proptypes", "remove-comments"]
+    "production": {
+      "plugins": ["remove-comments"]
     }
   }
 }

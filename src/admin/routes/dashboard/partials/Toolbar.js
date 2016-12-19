@@ -10,7 +10,12 @@ function Toolbar({ children }) {
       >
         <NavTabs>
           <Link to={'/admin/dashboard'}>Overview</Link>
-          <Link to={'/admin/dashboard/analytics'}>Analytics / Activity</Link>
+          <Link to={'/admin/dashboard/analytics'}>Analytics</Link>
+          <Link to={'/admin/dashboard/analytics'}>Analytics</Link>
+          <Link to={'/admin/dashboard/analytics'}>Analytics</Link>
+          <Link to={'/admin/dashboard/analytics'}>Analytics</Link>
+          <Link to={'/admin/dashboard/analytics'}>Analytics</Link>
+          <Link to={'/admin/dashboard/analytics'}>Last</Link>
         </NavTabs>
       </ToolbarContainer>
       {children}
