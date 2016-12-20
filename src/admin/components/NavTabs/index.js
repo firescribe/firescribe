@@ -1,21 +1,8 @@
 import React, { Component } from 'react';
-import { findDOMNode } from 'react-dom';
-import { Link as RouterLink } from 'react-router';
 import Measure from 'react-measure';
 
-// TODO cleanup/comments/propTypes
-
-export function Link({ to, children, onClick }) {
-  return (
-    <RouterLink
-      onClick={() => onClick()}
-      to={to}
-      style={styles.linkContainer}
-    >
-      {children}
-    </RouterLink>
-  );
-}
+import Active from './Active';
+import styles from './styles';
 
 class NavTabs extends Component {
 
@@ -37,11 +24,16 @@ class NavTabs extends Component {
       parentWidth: 0,
       childWidth: 0,
       transformX: 0,
-      left: 0,
-      width: 0,
+      activeOffset: 0,
+      activeWidth: 0,
     };
   }
 
+  /**
+   * Handle updates to width changes
+   * @param nextProps
+   * @param nextState
+   */
   componentWillUpdate(nextProps, nextState) {
     const previousParent = this.state.parentWidth;
     const nextParent = nextState.parentWidth;
@@ -63,16 +55,14 @@ class NavTabs extends Component {
    * @param index
    */
   moveActiveBar(index) {
-    const width = this.widths[index];
-    let left = 0;
-
+    let offset = 0;
     for (let i = 0; i < index; i++) {
-      left += this.widths[i];
+      offset += this.widths[i];
     }
 
     this.setState({
-      left,
-      width,
+      activeOffset: offset,
+      activeWidth: this.widths[index],
     });
   }
 
@@ -109,31 +99,35 @@ class NavTabs extends Component {
    * On left page icon press
    */
   pageLeft() {
-    if(this.state.transformX === 0) return
-
-    this.setState({
-      transformX: this.state.transformX - 100,
-    });
+    if (this.state.transformX !== 0) {
+      this.setState({
+        transformX: this.state.transformX - 180,
+      });
+    }
   }
 
   /**
    * On right page icon press
    */
   pageRight() {
-    const remaining = this.state.childWidth - this.state.transformX;
-    if(this.state.childWidth - this.state.parentWidth < this.state.transformX) return
-    this.setState({
-      transformX: this.state.transformX + 100,
-    });
+    if ((this.state.childWidth - this.state.parentWidth) > this.state.transformX) {
+      this.setState({
+        transformX: this.state.transformX + 180,
+      });
+    }
   }
 
   /**
    * Render the individual tab items
-   * @returns {XML}
    */
   renderTabs() {
     return (
-      <div style={Object.assign({}, styles.tabContainer, { width: this.state.childWidth, transform: `translate3d(-${this.state.transformX}px, 0px, 0px)` })}>
+      <div
+        style={Object.assign({}, styles.tabContainer, {
+          width: this.state.childWidth,
+          transform: `translate3d(-${this.state.transformX}px, 0px, 0px)`
+        })}
+      >
         {React.Children.map(this.props.children, (child, index) => {
           return (
             <Measure
@@ -148,14 +142,13 @@ class NavTabs extends Component {
             </Measure>
           );
         })}
-        <div style={Object.assign({}, styles.activeBar, { width: this.state.width, left: this.state.left })}></div>
+        <Active width={this.state.activeWidth} offset={this.state.activeOffset} />
       </div>
     );
   }
 
   /**
    * Render the NavTabs
-   * @returns {XML}
    */
   render() {
     return (
@@ -165,7 +158,11 @@ class NavTabs extends Component {
       >
         <div style={{ position: 'relative' }}>
           {this.state.showPagination && <div style={styles.pageLeft} onClick={() => this.pageLeft()}>{' < '}</div>}
-          <div style={Object.assign({}, styles.container, this.props.style, this.state.showPagination ? { marginLeft: 40, marginRight: 40 } : null)}>
+          <div
+            style={Object.assign({}, styles.container, this.props.style, this.state.showPagination ? {
+              marginLeft: 40,
+              marginRight: 40
+            } : null)}>
             {this.renderTabs()}
           </div>
           {this.state.showPagination && <div style={styles.pageRight} onClick={() => this.pageRight()}>{' > '}</div>}
@@ -179,57 +176,5 @@ NavTabs.contextTypes = {
   router: React.PropTypes.object
 };
 
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    position: 'relative',
-    overflow: 'hidden',
-    height: 48,
-  },
-  tabContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    position: 'absolute',
-    left: 0,
-    transition: 'all 300ms ease',
-  },
-  linkContainer: {
-    display: 'flex',
-    minWidth: 100,
-    height: 48,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingLeft: 24,
-    paddingRight: 24,
-    color: '#ffffff',
-    textDecoration: 'none',
-    fontSize: 14,
-  },
-  pageLeft: {
-    cursor: 'pointer',
-    position: 'absolute',
-    left: 0,
-    color: '#ffffff',
-    fontSize: 17,
-    padding: 15,
-  },
-  pageRight: {
-    cursor: 'pointer',
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    color: '#ffffff',
-    fontSize: 17,
-    padding: 15,
-  },
-  activeBar: {
-    position: 'absolute',
-    bottom: 0,
-    height: 3,
-    backgroundColor: '#ffffff',
-    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-  },
-};
-
+export { default as Tab } from './Tab';
 export default NavTabs;

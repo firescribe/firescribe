@@ -1,5 +1,5 @@
 import React from 'react';
-import NavTabs, { Link } from 'components/NavTabs';
+import NavTabs, { Link } from 'admin/components/NavTabs';
 import ToolbarContainer from 'admin/containers/ToolbarContainer';
 import RenderPosts from './RenderPosts';
 

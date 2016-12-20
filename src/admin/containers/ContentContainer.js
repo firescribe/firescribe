@@ -1,9 +1,13 @@
 import React from 'react';
 
-function ContentContainer({ isDesktop }) {
+function ContentContainer({ toolbar, children, ...props }) {
+  console.log('content', toolbar)
   return (
-    <div style={styles.container}>
-
+    <div>
+      {toolbar || null}
+      <div style={styles.container}>
+        {children}
+      </div>
     </div>
   );
 }

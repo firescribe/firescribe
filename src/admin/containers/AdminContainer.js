@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
-import firebase from 'services/firebase';
+
+import ContentContainer from 'admin/containers/ContentContainer';
 import DrawerContainer from './DrawerContainer';
-import ToolbarContainer from './ToolbarContainer';
 
 class AdminContainer extends Component {
 
@@ -14,26 +14,25 @@ class AdminContainer extends Component {
     };
   }
 
+  /**
+   * Toggle the drawer open/closed
+   */
   toggleDrawerState() {
     this.setState({
       drawerOpen: !this.state.drawerOpen,
     });
   }
 
-  componentDidMount() {
-    firebase.database().ref('config').on('value', (snapshot) => {
-      this.setState({ title: snapshot.val().websiteTitle, })
-    });
-  }
-
+  /**
+   * Render Firescribe
+   */
   render() {
     return (
       <div>
         <AppBar
-          title={this.state.title}
+          title={''}
           showMenuIconButton={!this.props.isDesktop}
           onLeftIconButtonTouchTap={this.toggleDrawerState.bind(this)}
-          style={{backgroundColor: '#0288d1'}}
         />
         <DrawerContainer
           isOpen={this.props.isDesktop ? true : this.state.drawerOpen}
@@ -42,7 +41,10 @@ class AdminContainer extends Component {
           headerText={this.state.title}
         />
         <div style={{ marginLeft: this.props.isDesktop ? 256 : 0 }}>
-          {this.props.children}
+          {this.props.toolbar}
+          <ContentContainer>
+            {this.props.children}
+          </ContentContainer>
         </div>
       </div>
     );

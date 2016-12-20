@@ -1,5 +1,4 @@
 import React from 'react';
-import NavTabs, { Link } from 'components/NavTabs';
 
 function ToolbarContainer({ title, children }) {
   return (

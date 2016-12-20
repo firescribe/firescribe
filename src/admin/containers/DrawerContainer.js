@@ -4,6 +4,11 @@ import { Link } from 'react-router';
 import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
 
+/**
+ * Create a Drawer link item
+ * @param text
+ * @param to
+ */
 function CreateLink({ text, to }) {
   return (
     <Link
@@ -20,6 +25,10 @@ function CreateLink({ text, to }) {
   );
 }
 
+/**
+ * Create a static Drawer header
+ * @param text
+ */
 function CreateHeader({ text }) {
   return (
     <div style={styles.headerContainer}>
@@ -28,8 +37,13 @@ function CreateHeader({ text }) {
   );
 }
 
-function DrawerContainer({ isDesktop, isOpen, onClose, headerText }) {
-
+/**
+ * Render the Drawer
+ * @param isDesktop
+ * @param isOpen
+ * @param onClose
+ */
+function DrawerContainer({ isDesktop, isOpen, onClose }) {
   return (
       <Drawer
         open={isOpen}
@@ -41,7 +55,6 @@ function DrawerContainer({ isDesktop, isOpen, onClose, headerText }) {
           }
         }}
       >
-        {!isDesktop && <div style={{padding: '22.5px 25px', background: '#0288d1', color: '#fff', marginBottom: 10}}>{headerText}</div>}
         <CreateLink text={'Dashboard'} to="/admin/dashboard" />
         <CreateHeader text={'Content'} />
         <CreateLink text={'Posts'} to="/admin/posts" />
