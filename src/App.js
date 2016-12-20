@@ -4,7 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { WindowResizeListener } from 'react-window-resize-listener';
 
 import { updateWidth } from 'actions/WindowActions';
-// import SetupView from 'admin/views/Setup';
+import SetupView from 'admin/routes/setup';
 import { syncConfig } from 'actions/SyncActions';
 
 WindowResizeListener.DEBOUNCE_TIME = 300;
@@ -28,9 +28,9 @@ class App extends Component {
 
     let children = this.props.children;
 
-    // if (!config.response.initialized) {
-    //   children = <SetupView />;
-    // }
+    if (!config.response.initialized) {
+      children = <SetupView />;
+    }
 
     return (
       <MuiThemeProvider>

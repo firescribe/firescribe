@@ -111,7 +111,7 @@ const styles = {
     bottom: 0,
     height: 3,
     backgroundColor: '#ffffff',
-    transition: 'all 300ms ease',
+    transition: 'all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
   },
 };
 

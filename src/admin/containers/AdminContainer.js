@@ -24,7 +24,7 @@ class AdminContainer extends Component {
     return (
       <div>
         <AppBar
-          title={'Fireblog'}
+          title={'Firescribe'}
           showMenuIconButton={!this.props.isDesktop}
           onLeftIconButtonTouchTap={this.toggleDrawerState.bind(this)}
         />
