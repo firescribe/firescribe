@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import CircularProgress from 'material-ui/CircularProgress';
 import Measure from 'react-measure';
 
 import { updateWidth } from 'actions/WindowActions';
@@ -20,23 +21,37 @@ class App extends Component {
   render() {
     const config = this.props.config;
 
-    // if (!config.loaded) {
-    //   return null;
-    // }
+    if (!config.loaded) {
+      return (
+        <MuiThemeProvider>
+          <div style={{width: '100%', height: '100vh', display: 'table'}}>
+            <div style={{
+              display: 'table-cell',
+              verticalAlign: 'middle',
+              textAlign: 'center',
+            }}>
+              <CircularProgress />
+            </div>
+          </div>
+        </MuiThemeProvider>
+      );
+    }
 
     let children = this.props.children;
 
     if (!config.response.initialized) {
       children = <SetupView />;
     }
-
+    console.log('hit')
     return (
       <MuiThemeProvider>
         <Measure
           whitelist={['width']}
           onMeasure={this.props.updateWidth}
         >
-          {children}
+          <div>
+            {children}
+          </div>
         </Measure>
       </MuiThemeProvider>
     );

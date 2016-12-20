@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
-
+import firebase from 'services/firebase';
 import DrawerContainer from './DrawerContainer';
 import ToolbarContainer from './ToolbarContainer';
 
@@ -20,11 +20,18 @@ class AdminContainer extends Component {
     });
   }
 
+  componentDidMount() {
+    firebase.database().ref('config').on('value', (snapshot) => {
+      console.log(snapshot.val())
+      this.setState({ title: snapshot.val().websiteTitle, })
+    });
+  }
+
   render() {
     return (
       <div>
         <AppBar
-          title={'Firescribe'}
+          title={this.state.title}
           showMenuIconButton={!this.props.isDesktop}
           onLeftIconButtonTouchTap={this.toggleDrawerState.bind(this)}
         />
@@ -44,6 +51,7 @@ class AdminContainer extends Component {
 function select(state) {
   return {
     isDesktop: state.window.isDesktop,
+    config: state.config,
   }
 }
 

@@ -9,9 +9,12 @@ import {
 } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
+import Chip from 'material-ui/Chip';
 import { connect } from 'react-redux';
 import { updateWidth } from 'actions/WindowActions';
 import { syncConfig } from 'actions/SyncActions';
+import { browserHistory } from 'react-router'
 
 class SetupView extends Component {
 
@@ -20,30 +23,19 @@ class SetupView extends Component {
     this.state = {
       loading: true,
       finished: false,
-      stepIndex: 0,
+      stepIndex: firebase ? 1 : 0,
+      Name: '',
+      Email: '',
+      Password: '',
+      Categories: '',
     }
-  }
-
-  componentDidMount() {
-    // if(firebase) {
-    //   this.setState({loading: false, stepIndex: 1});
-    // }
-    //
-    // let ticker = setInterval(() => {
-    //   if(firebase) {
-    //     this.setState({loading: false, stepIndex: 1});
-    //     clearInterval(ticker);
-    //   } else {
-    //     console.log('miss')
-    //   }
-    // }, 500)
   }
 
   handleNext() {
     const {stepIndex} = this.state;
     this.setState({
       stepIndex: stepIndex + 1,
-      finished: stepIndex >= 2,
+      finished: stepIndex >= 3,
     });
   }
 
@@ -60,11 +52,11 @@ class SetupView extends Component {
    return (
      <div style={{margin: '12px 0'}}>
        <RaisedButton
-         label={this.state.stepIndex === 2 ? 'Finish' : 'Next'}
+         label={this.state.stepIndex === 3 ? 'Finish' : 'Next'}
          disableTouchRipple={true}
          disableFocusRipple={true}
          primary={true}
-         onTouchTap={this.handleNext.bind(this)}
+         onTouchTap={this.state.stepIndex === 3 ? this.sendToDatabase.bind(this) : this.handleNext.bind(this)}
          style={{marginRight: 12}}
        />
        {step > 0 && (
@@ -79,13 +71,60 @@ class SetupView extends Component {
      </div>
    );
  }
+  handleRequestDelete(key) {
+   const tagToDelete = this.state.Categories.map((Categories) => Categories.key).indexOf(key);
+   this.state.Categories.splice(tagToDelete, 1);
+   this.setState({Categories: tagToDelete});
+  };
 
+  renderChip(data, key) {
+   return (
+     <Chip
+       key={key}
+       onRequestDelete={() => this.handleRequestDelete(data.key).bind(this)}
+       style={{margin: 4}}
+     >
+       {data.replace(/[^a-zA-Z ]/g, "")}
+     </Chip>
+   );
+  }
+
+  handleChange(event) {
+   const inputValue = event.target.value;
+   this.setState({
+     [event.target.id.split('-')[2]]: inputValue,
+   });
+  };
+
+  sendToDatabase() {
+    // @TODO validation
+    if(!this.state.WebsiteTitle) return;
+    // if(!this.state.websiteLogo) return;
+    if(!this.state.Name) return;
+    if(!this.state.Email) return;
+    if(!this.state.Password) return;
+    if(!this.state.Categories) return;
+
+    this.setState({finished: true})
+
+    setTimeout(() => {
+      firebase.database().ref('config').update({
+        websiteTitle: this.state.WebsiteTitle,
+        // websiteLogo: this.state.websiteLogo,
+        ownerName: this.state.Name,
+        contactEmail: this.state.Email,
+        metaTags: this.state.Categories,
+        initialized: true,
+      })
+    }, 3000)
+
+  }
 
   /**
    * Render the CMS
    */
   render() {
-    if(!this.state.loading) {
+    if(!this.state.loading || this.state.finished) {
       return (
         <div style={{width: '100%', height: '100vh', display: 'table'}}>
           <div style={{
@@ -94,12 +133,11 @@ class SetupView extends Component {
             textAlign: 'center',
           }}>
             <CircularProgress />
-            <h4>Attempting to connect to Firebase... Did you read the <a href="#">Setup guide</a>?</h4>
+            <h4>Working...</h4>
           </div>
         </div>
       );
     };
-
     return (
       <div style={{width: '100%', height: '100vh'}}>
         <div style={{maxWidth: 380, maxHeight: 400, margin: 'auto', position: 'relative', top: '50%', transform: 'translateY(-50%)'}}>
@@ -114,38 +152,61 @@ class SetupView extends Component {
               </StepContent>
             </Step>
             <Step>
-              <StepLabel>Create an ad group</StepLabel>
+              <StepLabel>Howdy!</StepLabel>
               <StepContent>
-                <p>An ad group contains one or more ads which target a shared set of keywords.</p>
+                <p>
+                  What should we call the website?
+                </p>
+                <TextField
+                  hintText="My Awesome Blog"
+                  floatingLabelText="Website Title"
+                  onChange={this.handleChange.bind(this)}
+                /><br />
                 {this.renderStepActions(1)}
               </StepContent>
             </Step>
             <Step>
-              <StepLabel>Create an ad</StepLabel>
+              <StepLabel>Who are you?</StepLabel>
               <StepContent>
-                <p>
-                  Try out different ad text to see what brings in the most customers,
-                  and learn how to enhance your ads using features like ad extensions.
-                  If you run into any problems with your ads, find out how to tell if
-                  they're running and how to resolve approval issues.
-                </p>
+                <p>This will be your Administrative account, please keep the details safe.</p>
+                <TextField
+                  hintText="Company/ Your name"
+                  floatingLabelText="Name"
+                  onChange={this.handleChange.bind(this)}
+                /><br />
+                <TextField
+                  hintText="Email"
+                  floatingLabelText="Email"
+                  onChange={this.handleChange.bind(this)}
+                /><br />
+                <TextField
+                  hintText="Password"
+                  floatingLabelText="Password"
+                  onChange={this.handleChange.bind(this)}
+                  type="password"
+                /><br />
                 {this.renderStepActions(2)}
               </StepContent>
             </Step>
+            <Step>
+              <StepLabel>Tell the world!</StepLabel>
+              <StepContent>
+                <p>
+                  Before you head off dominating the world with your blog, please take the time to 'tag' your site. e.g. Arts, Crafts, Design
+                </p>
+                <div style={{display: 'flex', flexWrap: 'wrap',}}>
+                  {this.state.Categories === '' ? <div></div> : this.state.Categories.split(', ').map(this.renderChip.bind(this))}
+                </div>
+                <TextField
+                  hintText="Start typing"
+                  floatingLabelText="Categories"
+                  onChange={this.handleChange.bind(this)}
+                />
+                <br />
+                {this.renderStepActions(3)}
+              </StepContent>
+            </Step>
           </Stepper>
-          {this.state.finished && (
-            <p style={{margin: '20px 0', textAlign: 'center'}}>
-              <a
-                href="#"
-                onClick={(event) => {
-                  event.preventDefault();
-                  this.setState({stepIndex: 0, finished: false});
-                }}
-              >
-                Click here
-              </a> to reset the example.
-            </p>
-          )}
         </div>
       </div>
     );

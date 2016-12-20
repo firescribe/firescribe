@@ -7,10 +7,9 @@ export const CONFIG_SETUP = 'CONFIG_SETUP';
  * @returns {function(*)}
  */
 export function setup(config) {
-  firebase.database().ref('config').set({
+  firebase.database().ref('config').update({
     initialized: true,
   });
-
   return {
     type: CONFIG_SETUP,
     config,
