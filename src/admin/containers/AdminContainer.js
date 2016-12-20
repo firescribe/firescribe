@@ -33,6 +33,7 @@ class AdminContainer extends Component {
           title={this.state.title}
           showMenuIconButton={!this.props.isDesktop}
           onLeftIconButtonTouchTap={this.toggleDrawerState.bind(this)}
+          style={{backgroundColor: '#0288d1'}}
         />
         <DrawerContainer
           isOpen={this.props.isDesktop ? true : this.state.drawerOpen}

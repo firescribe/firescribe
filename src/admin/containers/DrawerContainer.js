@@ -41,7 +41,7 @@ function DrawerContainer({ isDesktop, isOpen, onClose, headerText }) {
           }
         }}
       >
-        {!isDesktop && <div style={{padding: '22.5px 25px', background: 'rgb(0, 188, 212)', color: '#fff', marginBottom: 10}}>{headerText}</div>}
+        {!isDesktop && <div style={{padding: '22.5px 25px', background: '#0288d1', color: '#fff', marginBottom: 10}}>{headerText}</div>}
         <CreateLink text={'Dashboard'} to="/admin/dashboard" />
         <CreateHeader text={'Content'} />
         <CreateLink text={'Posts'} to="/admin/posts" />
