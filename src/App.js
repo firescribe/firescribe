@@ -42,7 +42,6 @@ class App extends Component {
     if (!config.response.initialized) {
       children = <SetupView />;
     }
-    console.log('hit')
     return (
       <MuiThemeProvider>
         <Measure

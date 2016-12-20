@@ -28,11 +28,12 @@ function CreateHeader({ text }) {
   );
 }
 
-function DrawerContainer({ isDesktop, isOpen, onClose }) {
+function DrawerContainer({ isDesktop, isOpen, onClose, headerText }) {
+
   return (
       <Drawer
         open={isOpen}
-        containerStyle={{ paddingTop: 10, top: isDesktop ? 64 : 0 }}
+        containerStyle={{ paddingTop: isDesktop ? 10 : 0, top: isDesktop ? 64 : 0 }}
         docked={isDesktop}
         onRequestChange={(open) => {
           if (!open) {
@@ -40,6 +41,7 @@ function DrawerContainer({ isDesktop, isOpen, onClose }) {
           }
         }}
       >
+        {!isDesktop && <div style={{padding: '22.5px 25px', background: 'rgb(0, 188, 212)', color: '#fff', marginBottom: 10}}>{headerText}</div>}
         <CreateLink text={'Dashboard'} to="/admin/dashboard" />
         <CreateHeader text={'Content'} />
         <CreateLink text={'Posts'} to="/admin/posts" />

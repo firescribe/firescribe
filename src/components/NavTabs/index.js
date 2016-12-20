@@ -109,6 +109,8 @@ class NavTabs extends Component {
    * On left page icon press
    */
   pageLeft() {
+    if(this.state.transformX === 0) return
+
     this.setState({
       transformX: this.state.transformX - 100,
     });
@@ -118,10 +120,10 @@ class NavTabs extends Component {
    * On right page icon press
    */
   pageRight() {
-    const remaining = this.state.parentWidth - this.state.childWidth;
-
+    const remaining = this.state.childWidth - this.state.transformX;
+    if(this.state.childWidth - this.state.parentWidth < this.state.transformX) return
     this.setState({
-      transformX: this.state.transformX + (remaining < 100 ? 100 : remaining),
+      transformX: this.state.transformX + 100,
     });
   }
 

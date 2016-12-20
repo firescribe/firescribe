@@ -22,7 +22,6 @@ class AdminContainer extends Component {
 
   componentDidMount() {
     firebase.database().ref('config').on('value', (snapshot) => {
-      console.log(snapshot.val())
       this.setState({ title: snapshot.val().websiteTitle, })
     });
   }
@@ -39,6 +38,7 @@ class AdminContainer extends Component {
           isOpen={this.props.isDesktop ? true : this.state.drawerOpen}
           isDesktop={this.props.isDesktop}
           onClose={this.toggleDrawerState.bind(this)}
+          headerText={this.state.title}
         />
         <div style={{ marginLeft: this.props.isDesktop ? 256 : 0 }}>
           {this.props.children}
