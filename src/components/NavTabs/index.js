@@ -10,7 +10,7 @@ export function Link({ to, children, onClick }) {
     <RouterLink
       onClick={() => onClick()}
       to={to}
-      style={styles.tabContainer}
+      style={styles.linkContainer}
     >
       {children}
     </RouterLink>
@@ -25,6 +25,7 @@ class NavTabs extends Component {
     this.initialTab = 0;
     this.widths = [];
 
+    // Find the currently active tab
     React.Children.forEach(props.children, (child, index) => {
       if (context.router.isActive(child.props.to)) {
         this.initialTab = index;
@@ -32,12 +33,35 @@ class NavTabs extends Component {
     });
 
     this.state = {
-      hasAllWidths: false,
+      showPagination: false,
+      parentWidth: 0,
+      childWidth: 0,
+      transformX: 0,
       left: 0,
       width: 0,
     };
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    const previousParent = this.state.parentWidth;
+    const nextParent = nextState.parentWidth;
+    const previousChild = this.state.previousChild;
+    const nextChild = nextState.childWidth;
+
+    // If we have both parent & child widths & the child is greater than the parent
+    if (nextParent !== 0 && nextChild !== 0 && nextParent !== previousParent && nextChild !== previousChild) {
+      this.setState({
+        translateX: nextParent > nextChild ? 0 : this.state.tabsPosition,
+        showPagination: nextChild > nextParent,
+      });
+    }
+  }
+
+  /**
+   * Move the active bar into position under the
+   * tab index
+   * @param index
+   */
   moveActiveBar(index) {
     const width = this.widths[index];
     let left = 0;
@@ -52,34 +76,99 @@ class NavTabs extends Component {
     });
   }
 
+  /**
+   * Set the width of the NabTabs container
+   * @param width
+   */
+  setParentWidth(width) {
+    this.setState({
+      parentWidth: width,
+    });
+  }
+
+  /**
+   * Set the width of the children tabs
+   * @param index
+   * @param width
+   */
   setChildWidth(index, width) {
     this.widths[index] = width;
     if (index + 1 === React.Children.count(this.props.children)) {
-      this.moveActiveBar(this.initialTab)
+      this.moveActiveBar(this.initialTab);
+
+      // Calculate the total children widths
+      this.setState({
+        childWidth: this.widths.reduce((a, b) => {
+          return a + b;
+        }, 0),
+      });
     }
   }
 
-  render() {
+  /**
+   * On left page icon press
+   */
+  pageLeft() {
+    this.setState({
+      transformX: this.state.transformX - 100,
+    });
+  }
+
+  /**
+   * On right page icon press
+   */
+  pageRight() {
+    const remaining = this.state.parentWidth - this.state.childWidth;
+
+    this.setState({
+      transformX: this.state.transformX + (remaining < 100 ? 100 : remaining),
+    });
+  }
+
+  /**
+   * Render the individual tab items
+   * @returns {XML}
+   */
+  renderTabs() {
     return (
-      <div style={Object.assign(styles.container, this.props.style)}>
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
-          {React.Children.map(this.props.children, (child, index) => {
-            return (
-              <Measure
-                whitelist={['width']}
-                onMeasure={(dimensions) => {
-                  this.setChildWidth(index, dimensions.width);
-                }}
-              >
-                {React.cloneElement(child, {
-                  onClick: () => this.moveActiveBar(index),
-                })}
-              </Measure>
-            );
-          })}
-        </div>
+      <div style={Object.assign({}, styles.tabContainer, { width: this.state.childWidth, transform: `translate3d(-${this.state.transformX}px, 0px, 0px)` })}>
+        {React.Children.map(this.props.children, (child, index) => {
+          return (
+            <Measure
+              whitelist={['width']}
+              onMeasure={(dimensions) => {
+                this.setChildWidth(index, dimensions.width);
+              }}
+            >
+              {React.cloneElement(child, {
+                onClick: () => this.moveActiveBar(index),
+              })}
+            </Measure>
+          );
+        })}
         <div style={Object.assign({}, styles.activeBar, { width: this.state.width, left: this.state.left })}></div>
       </div>
+    );
+  }
+
+  /**
+   * Render the NavTabs
+   * @returns {XML}
+   */
+  render() {
+    return (
+      <Measure
+        whitelist={['width']}
+        onMeasure={(dimensions) => this.setParentWidth(dimensions.width)}
+      >
+        <div style={{ position: 'relative' }}>
+          {this.state.showPagination && <div style={styles.pageLeft} onClick={() => this.pageLeft()}>{' < '}</div>}
+          <div style={Object.assign({}, styles.container, this.props.style, this.state.showPagination ? { marginLeft: 40, marginRight: 40 } : null)}>
+            {this.renderTabs()}
+          </div>
+          {this.state.showPagination && <div style={styles.pageRight} onClick={() => this.pageRight()}>{' > '}</div>}
+        </div>
+      </Measure>
     );
   }
 }
@@ -93,8 +182,17 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     position: 'relative',
+    overflow: 'hidden',
+    height: 48,
   },
   tabContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    position: 'absolute',
+    left: 0,
+    transition: 'all 300ms ease',
+  },
+  linkContainer: {
     display: 'flex',
     minWidth: 100,
     height: 48,
@@ -105,6 +203,23 @@ const styles = {
     color: '#ffffff',
     textDecoration: 'none',
     fontSize: 14,
+  },
+  pageLeft: {
+    cursor: 'pointer',
+    position: 'absolute',
+    left: 0,
+    color: '#ffffff',
+    fontSize: 17,
+    padding: 15,
+  },
+  pageRight: {
+    cursor: 'pointer',
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    color: '#ffffff',
+    fontSize: 17,
+    padding: 15,
   },
   activeBar: {
     position: 'absolute',

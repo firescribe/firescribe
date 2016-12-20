@@ -1,13 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { WindowResizeListener } from 'react-window-resize-listener';
+import Measure from 'react-measure';
 
 import { updateWidth } from 'actions/WindowActions';
 import SetupView from 'admin/routes/setup';
 import { syncConfig } from 'actions/SyncActions';
-
-WindowResizeListener.DEBOUNCE_TIME = 300;
 
 class App extends Component {
 
@@ -22,9 +20,9 @@ class App extends Component {
   render() {
     const config = this.props.config;
 
-    if (!config.loaded) {
-      return null;
-    }
+    // if (!config.loaded) {
+    //   return null;
+    // }
 
     let children = this.props.children;
 
@@ -34,10 +32,12 @@ class App extends Component {
 
     return (
       <MuiThemeProvider>
-        <div>
-          <WindowResizeListener onResize={this.props.updateWidth} />
+        <Measure
+          whitelist={['width']}
+          onMeasure={this.props.updateWidth}
+        >
           {children}
-        </div>
+        </Measure>
       </MuiThemeProvider>
     );
   }
@@ -56,7 +56,7 @@ function select(state) {
 
 function actions(dispatch) {
   return {
-    updateWidth: ({ windowWidth }) => dispatch(updateWidth(windowWidth)),
+    updateWidth: ({ width }) => dispatch(updateWidth(width)),
     syncConfig: () => dispatch(syncConfig()),
   };
 }
