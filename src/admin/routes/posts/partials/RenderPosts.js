@@ -21,6 +21,7 @@ class RenderPosts extends Component {
   }
 
   toggleExpanded(i) {
+    console.log(i)
     this.setState({
       expanded: {
         ...this.state.expanded,
@@ -30,6 +31,7 @@ class RenderPosts extends Component {
   }
 
   renderCardItems(post, i) {
+    console.log(this.state.expanded)
     return (
       <Card key={i} onClick={() => this.toggleExpanded(i)} style={ this.state.expanded[i] ? {
         position: 'absolute',
@@ -37,8 +39,9 @@ class RenderPosts extends Component {
         left: 0,
         right: 0,
         top: 0,
-        bottom: 0,
+        bottom: -20,
         zIndex: 99999,
+        overflowY: 'scroll',
       } : { maxWidth: this.props.isDesktop ? 400 : null, flex: 1, margin: 10 }}>
         <CardHeader
           title="Firescribe"
@@ -47,9 +50,9 @@ class RenderPosts extends Component {
         >
         </CardHeader>
         <CardMedia
-          overlay={<CardTitle title={post.overlayTitle} subtitle={post.overlaySubtitle}/>}
+          overlay={<CardTitle style={{ maxWidth: 600, margin: '0 auto' }} title={post.overlayTitle} subtitle={post.overlaySubtitle}/>}
         >
-          <div style={{ backgroundSize: 'cover', backgroundImage: `url(${post.postImage})`, width: '100%', height: 400}}></div>
+          <div style={{ backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url(${post.postImage})`, width: '100%', height: this.state.expanded[i] ? 400 : 200}}></div>
         </CardMedia>
         <CardTitle style={{ maxWidth: 600, margin: '0 auto' }} title={post.title} subtitle={post.subtitle}/>
         <CardText style={{ maxWidth: 600, margin: '0 auto' }} dangerouslySetInnerHTML={this.state.expanded[i] ? {__html: post.content} : {__html: post.excerpt}}>
@@ -66,7 +69,7 @@ class RenderPosts extends Component {
     console.log(this.state)
     return (
       <div style={this.props.isDesktop ? { padding: 20, display: 'flex', alignContent: 'space-between' } : { display: 'flex', alignContent: 'center', flexDirection: 'column' }}>
-        {this.state.posts && this.state.posts.map((post, i) => this.renderCardItems(post))}
+        {this.state.posts && this.state.posts.map((post, i) => this.renderCardItems(post, i))}
       </div>
     );
   }
