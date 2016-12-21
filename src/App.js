@@ -8,9 +8,8 @@ import { updateWidth } from 'actions/WindowActions';
 import SetupView from 'admin/routes/setup/views/Setup';
 import { syncConfig } from 'actions/SyncActions';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { red500, red700, red100, grey900, grey600, redA200, white } from 'material-ui/styles/colors';
+import { red500, red700, red100, grey900, redA200, white } from 'material-ui/styles/colors';
 
-console.log(brandColors)
 const muiThemed = getMuiTheme({
     palette: {
         primary1Color: red700,
@@ -21,7 +20,6 @@ const muiThemed = getMuiTheme({
         alternateTextColor: white,
     }
 });
-    console.log(muiThemed)
 
 class App extends Component {
 
@@ -52,11 +50,11 @@ class App extends Component {
             );
         }
 
-    // let children = this.props.children;
+        let children = this.props.children;
 
-    // if (!config.response.initialized) {
-      let children = <SetupView />;
-    // }
+        if (!config.response.initialized) {
+          let children = <SetupView />;
+        }
 
         return (
             <MuiThemeProvider muiTheme={muiThemed}>
