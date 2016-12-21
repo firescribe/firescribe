@@ -31,7 +31,7 @@ class AdminContainer extends Component {
         <AppBar
           showMenuIconButton={!this.props.isDesktop}
           onLeftIconButtonTouchTap={this.toggleDrawerState.bind(this)}
-          title={this.props.config.response.websiteTitle}
+          title={<div><img style={{width: 40, marginLeft: -10, position: 'relative', top: 5,}} src="https://firebasestorage.googleapis.com/v0/b/firecms-1826a.appspot.com/o/firelogo.png?alt=media&token=acf6a41f-6415-4c72-9879-0a1869a6211f" alt="Firescribe logo"/>{this.props.config.response.websiteTitle}</div>}
         />
         <DrawerContainer
           isOpen={this.props.isDesktop ? true : this.state.drawerOpen}
