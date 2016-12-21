@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 
 function NewPost() {
     return (
-        <CardWithToolbar title="Create new post" btnText="Save">
+        <CardWithToolbar title="New Post" btnText="Save">
             <div>
                 <TextField
                     hintText="Enter the title of your post"

@@ -1,8 +1,9 @@
 import React from 'react';
+import muiThemeable from 'material-ui/styles/muiThemeable';
 
-function ToolbarContainer({ title, children }) {
+function ToolbarContainer({ title, children, muiTheme }) {
   return (
-    <div style={styles.background}>
+    <div style={{background: muiTheme.palette.primary2Color}}>
       <div style={styles.container}>
         <span style={styles.title}>{title}</span>
       </div>
@@ -12,9 +13,6 @@ function ToolbarContainer({ title, children }) {
 }
 
 const styles = {
-  background: {
-    backgroundColor: '#039be5',
-  },
   container: {
     display: 'flex',
     alignItems: 'center',
@@ -33,4 +31,4 @@ const styles = {
   },
 };
 
-export default ToolbarContainer;
+export default muiThemeable()(ToolbarContainer);
