@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CardWithToolbar from 'admin/components/CardWithToolbar';
 import TextField from 'material-ui/TextField';
-import EditableDiv from 'react-wysiwyg-editor';
-import scribe, { scribe-plugin-blockquote-command }
 
 class NewPost extends Component {
 
@@ -34,7 +32,6 @@ class NewPost extends Component {
                         style={{ width: '100%' }}
                         multiLine={true}
                     /><br />
-                    <EditableDiv style={{ overflow: 'auto', width: 300, height: 100, maxHeight: 100 }} content={this.state.content} onChange={this.handleContentChange} />
                 </div>
             </CardWithToolbar>
         );
