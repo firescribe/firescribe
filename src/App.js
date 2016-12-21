@@ -5,7 +5,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import Measure from 'react-measure';
 
 import { updateWidth } from 'actions/WindowActions';
-import SetupView from 'admin/routes/setup';
+import SetupView from 'admin/routes/setup/views/Setup';
 import { syncConfig } from 'actions/SyncActions';
 
 class App extends Component {
@@ -37,11 +37,11 @@ class App extends Component {
       );
     }
 
-    let children = this.props.children;
+    // let children = this.props.children;
 
-    if (!config.response.initialized) {
-      children = <SetupView />;
-    }
+    // if (!config.response.initialized) {
+      let children = <SetupView />;
+    // }
 
     return (
       <MuiThemeProvider>
