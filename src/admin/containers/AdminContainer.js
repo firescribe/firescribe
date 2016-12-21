@@ -29,9 +29,9 @@ class AdminContainer extends Component {
     return (
       <div>
         <AppBar
-          title={''}
           showMenuIconButton={!this.props.isDesktop}
           onLeftIconButtonTouchTap={this.toggleDrawerState.bind(this)}
+          title={this.props.config.response.websiteTitle}
         />
         <DrawerContainer
           isOpen={this.props.isDesktop ? true : this.state.drawerOpen}

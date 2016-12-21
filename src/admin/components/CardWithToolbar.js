@@ -1,11 +1,11 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import RaisedButton from 'material-ui/RaisedButton';
-import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
+import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import Paper from 'material-ui/Paper';
 
 
-function newPost({ children, title, btnText }) {
+function CardWithToolbar({ children, title, btnText }) {
     return (
         <Paper>
             <Toolbar>
@@ -14,7 +14,6 @@ function newPost({ children, title, btnText }) {
                 </ToolbarGroup>
                 <ToolbarGroup lastChild={true}>
                     <FontIcon className="muidocs-icon-custom-sort"/>
-                    <ToolbarSeparator />
                     <RaisedButton label={btnText} primary={true}/>
                 </ToolbarGroup>
             </Toolbar>
@@ -23,4 +22,4 @@ function newPost({ children, title, btnText }) {
     );
 }
 
-export default newPost;
+export default CardWithToolbar;
