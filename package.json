@@ -60,7 +60,8 @@
     "react-router-redux": "^4.0.7",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "scribe": "^0.0.9"
   },
   "scripts": {
     "start": "node scripts/start.js",

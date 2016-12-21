@@ -12,10 +12,6 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Chip from 'material-ui/Chip';
 import { connect } from 'react-redux';
-import { updateWidth } from 'actions/WindowActions';
-import { syncConfig } from 'actions/SyncActions';
-import { browserHistory } from 'react-router'
-
 class SetupView extends Component {
 
   constructor(props) {
@@ -47,8 +43,6 @@ class SetupView extends Component {
   }
 
   renderStepActions(step) {
-   const {stepIndex} = this.state;
-
    return (
      <div style={{margin: '12px 0'}}>
        <RaisedButton

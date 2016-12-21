@@ -21,27 +21,27 @@ class App extends Component {
   render() {
     const config = this.props.config;
 
-    // if (!config.loaded) {
-    //   return (
-    //     <MuiThemeProvider>
-    //       <div style={{width: '100%', height: '100vh', display: 'table'}}>
-    //         <div style={{
-    //           display: 'table-cell',
-    //           verticalAlign: 'middle',
-    //           textAlign: 'center',
-    //         }}>
-    //           <CircularProgress />
-    //         </div>
-    //       </div>
-    //     </MuiThemeProvider>
-    //   );
-    // }
-    //
+    if (!config.loaded) {
+      return (
+        <MuiThemeProvider>
+          <div style={{width: '100%', height: '100vh', display: 'table'}}>
+            <div style={{
+              display: 'table-cell',
+              verticalAlign: 'middle',
+              textAlign: 'center',
+            }}>
+              <CircularProgress />
+            </div>
+          </div>
+        </MuiThemeProvider>
+      );
+    }
+
     let children = this.props.children;
-    //
-    // if (!config.response.initialized) {
-    //   children = <SetupView />;
-    // }
+
+    if (!config.response.initialized) {
+      children = <SetupView />;
+    }
 
     return (
       <MuiThemeProvider>
