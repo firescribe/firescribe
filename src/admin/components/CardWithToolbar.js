@@ -5,7 +5,7 @@ import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-
 import Paper from 'material-ui/Paper';
 
 
-function newPost({ children, title, btnText }) {
+function CardWithToolbar({ children, title, btnText }) {
     return (
         <Paper>
             <Toolbar>
@@ -23,4 +23,4 @@ function newPost({ children, title, btnText }) {
     );
 }
 
-export default newPost;
+export default CardWithToolbar;
